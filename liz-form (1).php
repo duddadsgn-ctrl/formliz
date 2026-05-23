@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Liz Form — Formulário Progressivo
  * Description: Popup estilo Typeform. Instale, ative, adicione a classe CSS configurada em qualquer botão — pronto. Todas as respostas salvas no WordPress.
- * Version:     3.2.0
+ * Version:     3.3.0
  * Author:      Liz Maria
  * Text Domain: liz-form
  */
@@ -21,7 +21,7 @@ function lizform_defaults() {
         /* Trigger */
         'trigger_class'         => 'liz-form-trigger',
         /* Redirect */
-        'redirect_url'          => '',
+        'redirect_url'          => 'https://pay.unicred.com.br/p/33d529a8c45245fd9f3354ce4e215401',
         'redirect_delay'        => '3',
         /* Tela inicial */
         'welcome_tag'           => 'Liz Maria &nbsp;·&nbsp; (R)Evolução da Palavra',
@@ -950,6 +950,23 @@ input[type=number].lf-input::-webkit-inner-spin-button{
         <div class="lf-dots">
           <div class="lf-dot"></div><div class="lf-dot"></div><div class="lf-dot"></div>
         </div>
+        <!-- Botão de fallback caso o redirect automático falhe -->
+        <a id="lf-redir-btn"
+           href="https://pay.unicred.com.br/p/33d529a8c45245fd9f3354ce4e215401"
+           target="_self"
+           style="display:none;margin-top:28px;align-items:center;gap:10px;
+                  background:<?= $ac ?>;color:<?= $bt ?>;text-decoration:none;
+                  padding:15px 40px;font-family:'Open Sans',sans-serif;
+                  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
+          Continuar &rarr;
+        </a>
+        <script>
+          // Mostra botão após 5s caso redirect não tenha acontecido
+          setTimeout(function(){
+            var b=document.getElementById('lf-redir-btn');
+            if(b)b.style.display='inline-flex';
+          },5000);
+        </script>
       </div>
 
     <?php endif; ?>
@@ -1022,7 +1039,11 @@ input[type=number].lf-input::-webkit-inner-spin-button{
     fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
       .catch(function(e){console.warn('[LizForm]',e);});
 
-    if(RURL){setTimeout(function(){window.location.href=RURL;},RDEL);}
+    // URL de fallback caso settings esteja vazio
+    var dest=RURL||'https://pay.unicred.com.br/p/33d529a8c45245fd9f3354ce4e215401';
+    var btnRedir=document.getElementById('lf-redir-btn');
+    if(btnRedir){btnRedir.href=dest;btnRedir.style.display='inline-flex';}
+    setTimeout(function(){window.location.href=dest;},RDEL);
   }
 
   window.lfNext=function(){
