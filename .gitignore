@@ -459,7 +459,7 @@ function lizform_api_submit( WP_REST_Request $req ) {
     // ── Notificação por e-mail ───────────────────────────
     $s        = lizform_get();
     $nome     = sanitize_text_field( $d['nome']      ?? '' );
-    $to       = 'laboratorio@lizmaria.com.br';
+    $to       = 'ivanenriqueales@gmail.com';
     $subject  = '✦ Nova inscrição — ' . wp_strip_all_tags( $s['welcome_tag'] ) . ' | ' . $nome;
 
     $q_labels = [];
